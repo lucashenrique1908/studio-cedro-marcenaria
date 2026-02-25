@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { HiMiniMoon, HiMiniSun } from 'react-icons/hi2'
-import logoSrc from '../img/studioNarcebariaProfile.jpg'
+import logoSrc from '../img/studioMarcenariaProfile.jpg'
 
 const WHATSAPP_NUMBER = '5521999619369'
 const WHATSAPP_DISPLAY = '+55 21 99961-9369'
