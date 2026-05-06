@@ -1,0 +1,31 @@
+:root {
+  color-scheme: dark;
+  --bg: #081b16;
+  --bg-soft: #0f2721;
+  --surface: rgba(17, 39, 33, 0.72);
+  --surface-strong: rgba(18, 43, 37, 0.92);
+  --surface-border: rgba(216, 178, 98, 0.22);
+  --text: #eef2ee;
+  --muted: #b7c3bd;
+  --heading: #f7edcf;
+  --accent: #d7b46c;
+  --accent-2: #a1c0a1;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+  --hero-glow: radial-gradient(circle at 30% 20%, rgba(215, 180, 108, 0.2), transparent 55%);
+  --pattern-line: rgba(255, 255, 255, 0.03);
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-primary: var(--accent);
+  --color-primary-strong: var(--heading);
+  --color-text: var(--text);
+  --color-text-muted: var(--muted);
+  --color-border: var(--surface-border);
+
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Manrope', 'Segoe UI', sans-serif;
+
+  --max-width: 1120px;
+  --radius-md: 18px;
+  --shadow-soft: var(--shadow);
+}
