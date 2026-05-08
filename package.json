@@ -7,9 +7,10 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
+		"postbuild": "node scripts/sync-pages-fallback.mjs",
 		"preview": "vite preview",
 		"predeploy": "npm run build",
-		"deploy": "gh-pages -d dist"
+		"deploy": "gh-pages -d dist -b gh-pages --dotfiles"
 	},
 	"dependencies": {
 		"react": "^19.2.5",
