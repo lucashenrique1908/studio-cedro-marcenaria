@@ -7,6 +7,15 @@
     <title>studiomarcenaria</title>
     <script type="text/javascript">
       (function (l) {
+        if (l.pathname.endsWith("/index.prod.html")) {
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.replace(/\/index\.prod\.html$/, "/") + l.search + l.hash,
+          );
+          return;
+        }
+
         if (l.search[1] === "/") {
           var decoded = l.search
             .slice(1)
