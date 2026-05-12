@@ -2,7 +2,7 @@ export const testimonials = [
   {
     id: 'ana-martins',
     name: 'Ana Martins',
-    text: 'A cozinha ficou exatamente como imaginamos. O projeto aproveitou muito melhor o espaco e a instalacao foi muito cuidadosa.',
+    text: 'A cozinha ficou exatamente como imaginamos. O projeto aproveitou muito melhor o espaço e a instalação foi muito cuidadosa.',
     rating: 5,
   },
   {
@@ -14,7 +14,7 @@ export const testimonials = [
   {
     id: 'beatriz-rocha',
     name: 'Beatriz Rocha',
-    text: 'O roupeiro resolveu um problema antigo de organizacao. Tudo foi pensado para a nossa rotina.',
+    text: 'O roupeiro resolveu um problema antigo de organização. Tudo foi pensado para a nossa rotina.',
     rating: 5,
   },
 ];

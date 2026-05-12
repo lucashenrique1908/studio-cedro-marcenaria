@@ -6,12 +6,12 @@ function Header() {
     <header className="site-header">
       <div className="container header-content">
         <NavLink to="/" className="brand" end>
-          Studio Marcenaria
+          Studio Cedro Marcenaria
         </NavLink>
 
         <nav aria-label="Navegacao principal" className="main-nav">
           <ul>
-            {NAV_LINKS.map((link) => (
+            {NAV_LINKS.filter(link => !['/contato', '/admin'].includes(link.path)).map((link) => (
               <li key={link.path}>
                 <NavLink
                   to={link.path}
@@ -22,7 +22,7 @@ function Header() {
                   }
                   end={link.path === '/'}
                 >
-                  {link.label}
+                  {link.label === 'Servicos' ? 'Serviços' : link.label}
                 </NavLink>
               </li>
             ))}

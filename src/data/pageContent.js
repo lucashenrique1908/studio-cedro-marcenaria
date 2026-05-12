@@ -1,6 +1,6 @@
 export const HOME_PAGE = {
   eyebrow: 'Marcenaria sob medida',
-  title: 'Projetos que transformam ambientes em experiencias',
+  title: 'Projetos que transformam ambientes em experiências',
   description:
     'Base inicial para captacao de leads, apresentacao de portfolio e crescimento do negocio com uma arquitetura preparada para evolucao.',
 };
@@ -14,7 +14,7 @@ export const PROJECTS_PAGE = {
 
 export const SERVICES_PAGE = {
   eyebrow: 'Catalogo de servicos',
-  title: 'Escale sua oferta com organizacao',
+  title: 'Escale sua oferta com organização',
   description:
     'Pagina base para listar servicos, diferenciais e pacotes. O conteudo fica separado para facilitar manutencao e futuras integracoes com CMS.',
 };
@@ -34,6 +34,6 @@ export const ADMIN_PAGE = {
 };
 
 export const FOOTER_CONTENT = {
-  copy: 'Studio Marcenaria - Solucoes sob medida para ambientes residenciais e comerciais.',
+  copy: 'Studio Marcenaria - Soluções sob medida para ambientes residenciais e comerciais.',
   tagline: 'Arquitetura React preparada para crescimento continuo.',
 };

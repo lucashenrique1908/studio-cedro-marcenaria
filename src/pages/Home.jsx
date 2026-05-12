@@ -16,8 +16,14 @@ const careerInitialValues = {
   name: '',
   email: '',
   phone: '',
-  role: 'Arquiteto',
+  role: 'Marceneiro',
   resume: '',
+};
+
+const reviewInitialValues = {
+  name: '',
+  rating: 1,
+  opinion: '',
 };
 
 const budgetServices = [
@@ -27,7 +33,7 @@ const budgetServices = [
   'Apenas Pesquisando valores',
 ];
 
-const careerRoles = ['Arquiteto', 'Motorista', 'Marceneiro'];
+const careerRoles = ['Marceneiro', 'Ajudante de Marceneiro', 'Projetista'];
 
 function buildWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -38,6 +44,11 @@ function Home() {
   const [isCareerOpen, setIsCareerOpen] = useState(false);
   const [careerForm, setCareerForm] = useState(careerInitialValues);
   const [careerSent, setCareerSent] = useState(false);
+  const [reviewForm, setReviewForm] = useState(reviewInitialValues);
+  const [reviewMessage, setReviewMessage] = useState('');
+  const [isReviewMessageVisible, setIsReviewMessageVisible] = useState(false);
+  // Novo estado para armazenar os comentários
+  const [reviews, setReviews] = useState([]);
 
   function updateBudgetField(event) {
     const { name, value } = event.target;
@@ -50,6 +61,11 @@ function Home() {
       ...currentForm,
       [name]: files?.[0]?.name || value,
     }));
+  }
+
+  function updateReviewField(event) {
+    const { name, value } = event.target;
+    setReviewForm((currentForm) => ({ ...currentForm, [name]: value }));
   }
 
   function handleBudgetSubmit(event) {
@@ -85,6 +101,36 @@ function Home() {
     setCareerSent(true);
   }
 
+
+  function handleReviewSubmit(event) {
+    event.preventDefault();
+
+    // Adiciona o comentário ao estado
+    setReviews((currentReviews) => [
+      {
+        name: reviewForm.name,
+        rating: reviewForm.rating,
+        opinion: reviewForm.opinion,
+        date: new Date().toISOString(),
+      },
+      ...currentReviews,
+    ]);
+
+    setReviewMessage(
+      reviewForm.rating <= 2
+        ? 'Agradecemos sua opinião e vamos melhorar'
+        : 'Ficamos super felizes com sua avaliação!'
+    );
+    setIsReviewMessageVisible(true);
+
+    // Limpa o formulário
+    setReviewForm(reviewInitialValues);
+
+    window.setTimeout(() => {
+      setIsReviewMessageVisible(false);
+    }, 3000);
+  }
+
   function closeCareerModal() {
     setIsCareerOpen(false);
     setCareerSent(false);
@@ -101,7 +147,7 @@ function Home() {
     <section className="home-page">
       <div className="container home-hero">
         <span className="page-eyebrow tracking-in-expand">
-          Projetos que transformam ambientes em experiencias
+          Projetos que transformam ambientes em experiências
         </span>
         <h1 className="home-hero__title text-focus-in">
           Mais de 15 Anos Tirando seu projeto do papel
@@ -224,6 +270,95 @@ function Home() {
             Quero fazer um orçamento
           </button>
         </form>
+      </section>
+
+      <section className="container home-review-section" aria-label="Avaliação">
+        <div className="home-form-section__intro">
+          <span className="page-eyebrow">Avaliação</span>
+          <h2>Conte como foi sua experiência</h2>
+        </div>
+
+        <form className="lead-form review-form" onSubmit={handleReviewSubmit}>
+          <label>
+            Nome
+            <input
+              name="name"
+              type="text"
+              value={reviewForm.name}
+              onChange={updateReviewField}
+              required
+            />
+          </label>
+
+          <fieldset className="review-form__stars">
+            <legend>Estrelas</legend>
+            <div className="review-form__star-row">
+              {[1, 2, 3, 4, 5].map((rating) => (
+                <button
+                  className={`review-form__star ${
+                    rating <= reviewForm.rating ? 'review-form__star--active' : ''
+                  }`}
+                  key={rating}
+                  type="button"
+                  aria-label={`${rating} estrela${rating > 1 ? 's' : ''}`}
+                  aria-pressed={rating <= reviewForm.rating}
+                  onClick={() =>
+                    setReviewForm((currentForm) => ({ ...currentForm, rating }))
+                  }
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
+          <label className="lead-form__full">
+            Descreva sua opnião
+            <textarea
+              name="opinion"
+              rows="5"
+              value={reviewForm.opinion}
+              onChange={updateReviewField}
+              required
+            />
+          </label>
+
+          <button className="lead-form__submit" type="submit">
+            Enviar Sua avaliação
+          </button>
+
+        </form>
+
+        {reviewMessage && (
+          <p
+            className={`review-form__message ${
+              isReviewMessageVisible ? 'review-form__message--visible' : ''
+            }`}
+            role="status"
+          >
+            {reviewMessage}
+          </p>
+        )}
+
+        {/* Lista de comentários */}
+        {reviews.length > 0 && (
+          <div className="review-list">
+            <h3>Comentários recentes</h3>
+            <ul>
+              {reviews.map((review, idx) => (
+                <li key={idx} className="review-list__item">
+                  <strong>{review.name}</strong> —{' '}
+                  <span>
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <span key={i} style={{ color: i < review.rating ? '#FFD700' : '#ccc' }}>★</span>
+                    ))}
+                  </span>
+                  <div>{review.opinion}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
 
       <section className="container home-links" aria-label="Links úteis">

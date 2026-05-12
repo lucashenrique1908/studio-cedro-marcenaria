@@ -5,7 +5,7 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
+		"dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
 		"build": "vite build",
 		"postbuild": "node scripts/sync-pages-fallback.mjs",
 		"preview": "vite preview",

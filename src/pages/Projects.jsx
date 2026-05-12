@@ -11,6 +11,10 @@ function Projects() {
     () => filteredProducts.find((product) => product.id === openGalleryId),
     [filteredProducts, openGalleryId],
   );
+  const openGalleryIndex = useMemo(
+    () => filteredProducts.findIndex((product) => product.id === openGalleryId),
+    [filteredProducts, openGalleryId],
+  );
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -44,7 +48,8 @@ function Projects() {
       <section className="projects-page__header">
         <span className="projects-page__eyebrow">Projetos</span>
         <h1 className="projects-page__title tracking-in-expand">
-          Moveis planejados para cada ambiente
+          <span style={{ display: 'block', marginBottom: '0.5em' }}>Móveis planejados</span>
+          <span style={{ display: 'block', marginTop: '0.5em' }}>para cada ambiente</span>
         </h1>
       </section>
 
@@ -67,6 +72,8 @@ function Projects() {
       <AlbumGallery
         key={openGalleryProduct?.id || 'closed-gallery'}
         product={openGalleryProduct}
+        products={filteredProducts}
+        initialProductIndex={openGalleryIndex >= 0 ? openGalleryIndex : 0}
         onClose={() => setOpenGalleryId(null)}
       />
     </main>

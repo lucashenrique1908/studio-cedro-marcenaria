@@ -1,10 +1,13 @@
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 
 const rootDir = process.cwd();
 const distDir = resolve(rootDir, "dist");
 const rootAssetsDir = resolve(rootDir, "assets");
 const docsDir = resolve(rootDir, "docs");
+const preservedAssetFolders = ["cozinha", "Quartos", "DesignsEspeciais"];
+const preservedAssetsBackupDir = mkdtempSync(resolve(tmpdir(), "studio-assets-"));
 
 function copyIfExists(sourceRelativePath, targetRelativePath = sourceRelativePath) {
 	const sourcePath = resolve(distDir, sourceRelativePath);
@@ -20,6 +23,16 @@ if (existsSync(rootAssetsDir)) {
 	rmSync(rootAssetsDir, { recursive: true, force: true });
 }
 
+for (const folderName of preservedAssetFolders) {
+	const sourcePath = resolve(docsDir, "assets", folderName);
+	if (existsSync(sourcePath)) {
+		cpSync(sourcePath, resolve(preservedAssetsBackupDir, folderName), {
+			recursive: true,
+			force: true,
+		});
+	}
+}
+
 if (existsSync(docsDir)) {
 	rmSync(docsDir, { recursive: true, force: true });
 }
@@ -33,3 +46,15 @@ copyIfExists("index.html", "index.prod.html");
 writeFileSync(resolve(rootDir, ".nojekyll"), "");
 
 cpSync(distDir, docsDir, { recursive: true, force: true });
+
+for (const folderName of preservedAssetFolders) {
+	const backupPath = resolve(preservedAssetsBackupDir, folderName);
+	if (existsSync(backupPath)) {
+		cpSync(backupPath, resolve(docsDir, "assets", folderName), {
+			recursive: true,
+			force: true,
+		});
+	}
+}
+
+rmSync(preservedAssetsBackupDir, { recursive: true, force: true });
