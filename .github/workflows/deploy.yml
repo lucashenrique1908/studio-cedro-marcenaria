@@ -37,10 +37,13 @@ jobs:
         run: node scripts/prepare-vite-html.cjs
 
       - name: Build
-        run: npm run build -- --base=/studio-cedro-marcenaria/
+        run: npm run build
 
       - name: Create SPA fallback
         run: cp dist/index.html dist/404.html
+
+      - name: Verify GitHub Pages build
+        run: node scripts/verify-pages-build.cjs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
