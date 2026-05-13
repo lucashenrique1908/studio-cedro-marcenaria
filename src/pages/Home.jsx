@@ -1,58 +1,41 @@
 import { useState } from "react";
+import FieldError from "../components/forms/FieldError.jsx";
 import casalImg from "../assets/fotoCasal/generalImg14.jpeg";
-
-const WHATSAPP_NUMBER = "5521995013891";
-
-const budgetInitialValues = {
-	name: "",
-	email: "",
-	phone: "",
-	service: "Quero fazer um orçamento",
-	location: "",
-	details: "",
-};
-
-const careerInitialValues = {
-	name: "",
-	email: "",
-	phone: "",
-	role: "Marceneiro",
-	resume: "",
-};
-
-const reviewInitialValues = {
-	name: "",
-	rating: 1,
-	opinion: "",
-};
-
-const budgetServices = [
-	"Quero fazer um orçamento",
-	"Quero fazer um grande projeto",
-	"Quero fazer um planejamento",
-	"Apenas Pesquisando valores",
-];
-
-const careerRoles = ["Marceneiro", "Ajudante de Marceneiro", "Projetista"];
+import {
+	WHATSAPP_NUMBER,
+	budgetInitialValues,
+	budgetServices,
+	careerInitialValues,
+	careerRoles,
+	reviewInitialValues,
+} from "../data/forms.js";
+import { validateBudgetForm } from "../utils/formValidation.js";
 
 function buildWhatsAppUrl(message) {
 	return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
 function Home() {
+	const maxVisibleReviews = 5;
 	const [budgetForm, setBudgetForm] = useState(budgetInitialValues);
+	const [budgetErrors, setBudgetErrors] = useState({});
 	const [isCareerOpen, setIsCareerOpen] = useState(false);
 	const [careerForm, setCareerForm] = useState(careerInitialValues);
 	const [careerSent, setCareerSent] = useState(false);
 	const [reviewForm, setReviewForm] = useState(reviewInitialValues);
 	const [reviewMessage, setReviewMessage] = useState("");
 	const [isReviewMessageVisible, setIsReviewMessageVisible] = useState(false);
-	// Novo estado para armazenar os comentários
 	const [reviews, setReviews] = useState([]);
+	const [isReviewListExpanded, setIsReviewListExpanded] = useState(false);
+	const visibleReviews = isReviewListExpanded
+		? reviews
+		: reviews.slice(0, maxVisibleReviews);
+	const hasHiddenReviews = reviews.length > maxVisibleReviews;
 
 	function updateBudgetField(event) {
 		const { name, value } = event.target;
 		setBudgetForm((currentForm) => ({ ...currentForm, [name]: value }));
+		setBudgetErrors((currentErrors) => ({ ...currentErrors, [name]: "" }));
 	}
 
 	function updateCareerField(event) {
@@ -70,6 +53,13 @@ function Home() {
 
 	function handleBudgetSubmit(event) {
 		event.preventDefault();
+
+		const errors = validateBudgetForm(budgetForm);
+		setBudgetErrors(errors);
+
+		if (Object.keys(errors).length > 0) {
+			return;
+		}
 
 		const message = [
 			"Olá estava no seu website",
@@ -104,7 +94,6 @@ function Home() {
 	function handleReviewSubmit(event) {
 		event.preventDefault();
 
-		// Adiciona o comentário ao estado
 		setReviews((currentReviews) => [
 			{
 				name: reviewForm.name,
@@ -122,7 +111,6 @@ function Home() {
 		);
 		setIsReviewMessageVisible(true);
 
-		// Limpa o formulário
 		setReviewForm(reviewInitialValues);
 
 		window.setTimeout(() => {
@@ -198,7 +186,7 @@ function Home() {
 					</p>
 				</div>
 
-				<form className="lead-form" onSubmit={handleBudgetSubmit}>
+				<form className="lead-form" onSubmit={handleBudgetSubmit} noValidate>
 					<label>
 						Nome
 						<input
@@ -206,8 +194,10 @@ function Home() {
 							type="text"
 							value={budgetForm.name}
 							onChange={updateBudgetField}
-							required
+							aria-invalid={Boolean(budgetErrors.name)}
+							aria-describedby={budgetErrors.name ? "budget-name-error" : undefined}
 						/>
+						<FieldError id="budget-name-error" message={budgetErrors.name} />
 					</label>
 
 					<label>
@@ -217,8 +207,12 @@ function Home() {
 							type="email"
 							value={budgetForm.email}
 							onChange={updateBudgetField}
-							required
+							placeholder="seu@email.com"
+							title="Digite um e-mail válido"
+							aria-invalid={Boolean(budgetErrors.email)}
+							aria-describedby={budgetErrors.email ? "budget-email-error" : undefined}
 						/>
+						<FieldError id="budget-email-error" message={budgetErrors.email} />
 					</label>
 
 					<label>
@@ -228,8 +222,12 @@ function Home() {
 							type="tel"
 							value={budgetForm.phone}
 							onChange={updateBudgetField}
-							required
+							placeholder="(21) 99999-9999"
+							title="Digite um telefone válido com DDD. Ex: (21) 99999-9999"
+							aria-invalid={Boolean(budgetErrors.phone)}
+							aria-describedby={budgetErrors.phone ? "budget-phone-error" : undefined}
 						/>
+						<FieldError id="budget-phone-error" message={budgetErrors.phone} />
 					</label>
 
 					<label>
@@ -238,6 +236,10 @@ function Home() {
 							name="service"
 							value={budgetForm.service}
 							onChange={updateBudgetField}
+							aria-invalid={Boolean(budgetErrors.service)}
+							aria-describedby={
+								budgetErrors.service ? "budget-service-error" : undefined
+							}
 						>
 							{budgetServices.map((service) => (
 								<option key={service} value={service}>
@@ -245,17 +247,22 @@ function Home() {
 								</option>
 							))}
 						</select>
+						<FieldError id="budget-service-error" message={budgetErrors.service} />
 					</label>
 
 					<label>
-						Localidade (cidade e estado)
+						Localidade
 						<input
 							name="location"
 							type="text"
 							value={budgetForm.location}
 							onChange={updateBudgetField}
-							required
+							aria-invalid={Boolean(budgetErrors.location)}
+							aria-describedby={
+								budgetErrors.location ? "budget-location-error" : undefined
+							}
 						/>
+						<FieldError id="budget-location-error" message={budgetErrors.location} />
 					</label>
 
 					<label className="lead-form__full">
@@ -265,8 +272,12 @@ function Home() {
 							rows="5"
 							value={budgetForm.details}
 							onChange={updateBudgetField}
-							required
+							aria-invalid={Boolean(budgetErrors.details)}
+							aria-describedby={
+								budgetErrors.details ? "budget-details-error" : undefined
+							}
 						/>
+						<FieldError id="budget-details-error" message={budgetErrors.details} />
 					</label>
 
 					<button className="lead-form__submit" type="submit">
@@ -344,13 +355,12 @@ function Home() {
 					</p>
 				)}
 
-				{/* Lista de comentários */}
 				{reviews.length > 0 && (
 					<div className="review-list">
 						<h3>Comentários recentes</h3>
 						<ul>
-							{reviews.map((review, idx) => (
-								<li key={idx} className="review-list__item">
+							{visibleReviews.map((review) => (
+								<li key={`${review.date}-${review.name}`} className="review-list__item">
 									<strong>{review.name}</strong> —{" "}
 									<span>
 										{Array.from({ length: 5 }, (_, i) => (
@@ -368,6 +378,17 @@ function Home() {
 								</li>
 							))}
 						</ul>
+						{hasHiddenReviews && (
+							<button
+								className="review-list__toggle"
+								type="button"
+								onClick={() =>
+									setIsReviewListExpanded((currentValue) => !currentValue)
+								}
+							>
+								{isReviewListExpanded ? "Ver menos" : "Ver mais…"}
+							</button>
+						)}
 					</div>
 				)}
 			</section>

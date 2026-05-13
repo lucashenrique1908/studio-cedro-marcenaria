@@ -6,6 +6,8 @@ const imageModules = import.meta.glob(
   },
 );
 
+// The gallery is driven by folder names so new photos can be added without
+// touching the rendering components.
 const folderConfig = {
   cozinha: {
     category: 'cozinha',
@@ -125,7 +127,6 @@ export const products = Object.entries(folderConfig).flatMap(([folderName, confi
   const folderImages = [...(imagesByFolder[folderName] || [])].sort(naturalCompare);
 
   return folderImages.map((image, index) => {
-    // Remover títulos automáticos e palavra 'foto', garantir descrição correta
     const description =
       (config.descriptions[index] ||
       `${config.title} com marcenaria sob medida e acabamento pensado para o contexto do ambiente.`)

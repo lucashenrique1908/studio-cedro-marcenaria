@@ -1,16 +1,13 @@
 {
-	"name": "studiomarcenaria",
-	"homepage": "https://riqueecode.github.io/studioMarcenaria",
+	"name": "studio-cedro-marcenaria",
+	"version": "1.0.0",
 	"private": true,
-	"version": "0.0.0",
-	"type": "module",
+	"homepage": "https://lucashenrique1908.github.io/studio-cedro-marcenaria/",
 	"scripts": {
-		"dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
+		"dev": "vite",
 		"build": "vite build",
-		"postbuild": "node scripts/sync-pages-fallback.mjs",
-		"preview": "vite preview",
 		"predeploy": "npm run build",
-		"deploy": "gh-pages -d dist -b gh-pages --dotfiles"
+		"deploy": "gh-pages -d dist"
 	},
 	"dependencies": {
 		"react": "^19.2.5",

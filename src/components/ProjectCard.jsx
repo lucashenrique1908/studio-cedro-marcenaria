@@ -1,4 +1,4 @@
-function ProjectCard({ product, isGalleryOpen, onGalleryToggle }) {
+function ProjectCard({ product, onGalleryToggle }) {
   return (
     <article className="project-card puff-in-center">
       <div className="project-card__media" onClick={onGalleryToggle} style={{ cursor: 'pointer' }}>

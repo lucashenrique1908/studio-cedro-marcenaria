@@ -63,7 +63,6 @@ function Projects() {
           <ProjectCard
             key={product.id}
             product={product}
-            isGalleryOpen={openGalleryId === product.id}
             onGalleryToggle={() => handleGalleryToggle(product.id)}
           />
         ))}

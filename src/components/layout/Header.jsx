@@ -9,9 +9,9 @@ function Header() {
           Studio Cedro Marcenaria
         </NavLink>
 
-        <nav aria-label="Navegacao principal" className="main-nav">
+        <nav aria-label="Navegação principal" className="main-nav">
           <ul>
-            {NAV_LINKS.filter(link => !['/contato', '/admin'].includes(link.path)).map((link) => (
+            {NAV_LINKS.map((link) => (
               <li key={link.path}>
                 <NavLink
                   to={link.path}
@@ -22,7 +22,7 @@ function Header() {
                   }
                   end={link.path === '/'}
                 >
-                  {link.label === 'Servicos' ? 'Serviços' : link.label}
+                  {link.label}
                 </NavLink>
               </li>
             ))}

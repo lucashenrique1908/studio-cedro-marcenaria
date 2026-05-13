@@ -28,10 +28,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Prepare Vite HTML
         run: node scripts/prepare-vite-html.cjs
@@ -61,3 +68,41 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Smoke test published site
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+
+          echo "Checking ${PAGE_URL}"
+          html=""
+
+          for attempt in 1 2 3 4 5 6; do
+            html="$(curl -fsSL "${PAGE_URL}")" && break
+            sleep 10
+          done
+
+          if [ -z "$html" ]; then
+            echo "Could not download the published page."
+            exit 1
+          fi
+
+          printf '%s' "$html" | grep -q '/assets/' || {
+            echo "Published HTML does not reference built assets."
+            exit 1
+          }
+
+          if printf '%s' "$html" | grep -E 'src/main\.jsx|/src/|%VITE_BASE_URL%|%BASE_URL%'; then
+            echo "Published HTML is still serving development references."
+            exit 1
+          fi
+
+          asset_path="$(printf '%s' "$html" | grep -oE '/studio-cedro-marcenaria/assets/[^"]+\.js' | head -n 1)"
+
+          if [ -z "$asset_path" ]; then
+            echo "Could not find the built JavaScript asset in the published HTML."
+            exit 1
+          fi
+
+          curl -fsSL "https://${GITHUB_REPOSITORY_OWNER}.github.io${asset_path}" >/dev/null

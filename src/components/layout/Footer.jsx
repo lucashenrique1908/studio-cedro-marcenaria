@@ -5,7 +5,6 @@ function Footer() {
     <footer className="site-footer">
       <div className="container footer-content">
         <p>{FOOTER_CONTENT.copy}</p>
-        <p>{FOOTER_CONTENT.tagline}</p>
       </div>
     </footer>
   );
