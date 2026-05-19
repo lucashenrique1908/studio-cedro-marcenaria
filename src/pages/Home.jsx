@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FieldError from "../components/forms/FieldError.jsx";
-import casalImg from "../assets/fotoCasal/generalImg14.jpeg";
+import casalImg from "../assets/fotoCasal/fotoLogo.jpeg";
 import {
 	WHATSAPP_NUMBER,
 	budgetInitialValues,
