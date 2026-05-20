@@ -1,21 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <title>Studio Marcenaria</title>
+    <title>Studio Cedro Marcenaria</title>
     <script type="text/javascript">
-      var pathSegmentsToKeep = 1;
-
       var l = window.location;
+      var isGitHubPages = l.hostname.endsWith(".github.io");
+      var pathSegmentsToKeep = isGitHubPages ? 1 : 0;
+      var basePath = l.pathname
+        .split("/")
+        .slice(0, 1 + pathSegmentsToKeep)
+        .join("/");
+
       l.replace(
         l.protocol +
           "//" +
           l.hostname +
           (l.port ? ":" + l.port : "") +
-          l.pathname
-            .split("/")
-            .slice(0, 1 + pathSegmentsToKeep)
-            .join("/") +
+          basePath +
           "/?/" +
           l.pathname
             .slice(1)
