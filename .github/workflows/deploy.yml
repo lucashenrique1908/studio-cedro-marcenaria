@@ -84,10 +84,16 @@ jobs:
             exit 1
           fi
 
-          printf '%s' "$html" | grep -q '/assets/' || {
-            echo "Published HTML does not reference built assets."
-            exit 1
-          }
+          if ! printf '%s' "$html" | grep -q '/assets/'; then
+            if printf '%s' "$html" | grep -q '/docs/'; then
+              PAGE_URL="${PAGE_URL%/}/docs/"
+              echo "Root points to docs build, checking ${PAGE_URL}"
+              html="$(curl -fsSL "${PAGE_URL}")"
+            else
+              echo "Published HTML does not reference built assets."
+              exit 1
+            fi
+          fi
 
           if printf '%s' "$html" | grep -E 'src/main\.jsx|/src/|%VITE_BASE_URL%|%BASE_URL%'; then
             echo "Published HTML is still serving development references."
@@ -95,7 +101,7 @@ jobs:
           fi
 
           repo_name="${GITHUB_REPOSITORY#*/}"
-          asset_path="$(printf '%s' "$html" | grep -oE "/${repo_name}/assets/[^\"]+\.js" | head -n 1)"
+          asset_path="$(printf '%s' "$html" | grep -oE "/${repo_name}/(docs/)?assets/[^\"]+\.js" | head -n 1)"
 
           if [ -z "$asset_path" ]; then
             echo "Could not find the built JavaScript asset in the published HTML."

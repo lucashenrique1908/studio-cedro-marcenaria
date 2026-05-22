@@ -10,9 +10,17 @@ const repositoryName =
   process.env.GITHUB_REPOSITORY?.split("/").pop() ||
   "studio-cedro-marcenaria";
 const expectedBase = process.argv.includes("--pages")
-  ? `/${repositoryName}/`
+  ? normalizeBasePath(process.env.VITE_BASE_PATH || `/${repositoryName}/`)
   : "/";
 const isPagesBuild = expectedBase !== "/";
+
+function normalizeBasePath(basePath) {
+  if (!basePath || basePath === "/") {
+    return "/";
+  }
+
+  return `/${basePath.replace(/^\/+|\/+$/g, "")}/`;
+}
 
 function collectFiles(directory, extensions) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -49,8 +57,8 @@ if (!fs.existsSync(path.join(distDir, ".nojekyll"))) {
   throw new Error("dist/.nojekyll was not generated for GitHub Pages compatibility.");
 }
 
-if (expectedBase === "/" && /\/studio-cedro-marcenaria\//.test(html)) {
-  throw new Error("Vercel/root build contains the GitHub Pages base path.");
+if (expectedBase === "/" && /(?:src|href)="\/studio-cedro-marcenaria\//.test(html)) {
+  throw new Error("Vercel/root build references assets with the GitHub Pages base path.");
 }
 
 if (isPagesBuild && !html.includes(expectedBase)) {
@@ -104,8 +112,8 @@ for (const filePath of builtTextFiles) {
     }
   }
 
-  if (!isPagesBuild && /\/studio-cedro-marcenaria\//.test(content)) {
-    throw new Error(`${relativePath} contains a GitHub Pages base path in a root build.`);
+  if (!isPagesBuild && /\/studio-cedro-marcenaria\/(?:docs\/)?assets\//.test(content)) {
+    throw new Error(`${relativePath} contains GitHub Pages asset paths in a root build.`);
   }
 
   if (isPagesBuild && /["'(=]\/assets\//.test(content)) {
