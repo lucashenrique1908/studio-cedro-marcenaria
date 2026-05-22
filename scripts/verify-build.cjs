@@ -6,7 +6,7 @@ const outputDir = dirArgIndex >= 0 ? process.argv[dirArgIndex + 1] : "dist";
 const distDir = path.join(process.cwd(), outputDir);
 const indexPath = path.join(distDir, "index.html");
 const assetPattern = /(?:src|href)="([^"]*\/assets\/[^"]+)"/g;
-const faviconVersion = "v=4";
+const faviconVersion = "v=5";
 const repositoryName =
   process.env.GITHUB_REPOSITORY?.split("/").pop() ||
   "studio-cedro-marcenaria";
@@ -70,16 +70,22 @@ if (isPagesBuild && !html.includes(expectedBase)) {
   throw new Error(`GitHub Pages build does not include expected base path: ${expectedBase}`);
 }
 
-const expectedFaviconPath =
-  `${expectedBase}favicon.png`;
-const expectedShortcutPath =
-  `${expectedBase}favicon.ico`;
+const expectedPublishedBase =
+  outputDir === "docs" && isPagesBuild
+    ? `${expectedBase}docs/`
+    : expectedBase;
+const expectedFaviconPattern = new RegExp(
+  `href="${expectedPublishedBase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:assets/)?favicon[^"]*\\.png\\?${faviconVersion}"`
+);
+const expectedShortcutPattern = new RegExp(
+  `href="${expectedPublishedBase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:assets/)?favicon[^"]*\\.ico\\?${faviconVersion}"`
+);
 
-if (!html.includes(`${expectedFaviconPath}?${faviconVersion}`)) {
+if (!expectedFaviconPattern.test(html)) {
   throw new Error(`index.html does not reference favicon with expected base: ${expectedBase}`);
 }
 
-if (!html.includes(`${expectedShortcutPath}?${faviconVersion}`)) {
+if (!expectedShortcutPattern.test(html)) {
   throw new Error(`index.html does not reference shortcut icon with expected base: ${expectedBase}`);
 }
 
@@ -104,7 +110,10 @@ if (assets.length === 0) {
 }
 
 for (const assetUrl of assets) {
-  const assetPath = assetUrl.replace(/^https?:\/\/[^/]+/, "").replace(/^\//, "");
+  const assetPath = assetUrl
+    .replace(/^https?:\/\/[^/]+/, "")
+    .replace(/[?#].*$/, "")
+    .replace(/^\//, "");
   const assetRelativePath = assetPath.includes("/assets/")
     ? assetPath.slice(assetPath.indexOf("assets/"))
     : assetPath;

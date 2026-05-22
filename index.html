@@ -3,11 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=4" />
-    <link rel="shortcut icon" href="/favicon.ico?v=4" />
+    <link rel="icon" type="image/png" sizes="64x64" href="./docs/favicon.png?v=5" />
+    <link rel="shortcut icon" href="./docs/favicon.ico?v=5" />
     <title>Studio Cedro Marcenaria</title>
     <script>
       (function () {
+        if (
+          location.hostname.endsWith("github.io") &&
+          !location.pathname.startsWith("/studio-cedro-marcenaria/docs/")
+        ) {
+          location.replace("/studio-cedro-marcenaria/docs/");
+          return;
+        }
+
         var redirect = sessionStorage.redirect;
         delete sessionStorage.redirect;
 
@@ -19,6 +27,5 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

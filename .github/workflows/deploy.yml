@@ -100,14 +100,14 @@ jobs:
             exit 1
           fi
 
-          if ! printf '%s' "$html" | grep -q 'favicon.png?v=4'; then
+          if ! printf '%s' "$html" | grep -q 'favicon.png?v=5'; then
             echo "Published HTML does not reference the cache-busted favicon."
             exit 1
           fi
 
           repo_name="${GITHUB_REPOSITORY#*/}"
           asset_path="$(printf '%s' "$html" | grep -oE "/${repo_name}/(docs/)?assets/[^\"]+\.js" | head -n 1)"
-          favicon_path="$(printf '%s' "$html" | grep -oE "/${repo_name}/(docs/)?favicon\.png\?v=4" | head -n 1)"
+          favicon_path="$(printf '%s' "$html" | grep -oE "/${repo_name}/(docs/)?(assets/)?favicon[^\"]*\.png\?v=5" | head -n 1)"
 
           if [ -z "$asset_path" ]; then
             echo "Could not find the built JavaScript asset in the published HTML."
