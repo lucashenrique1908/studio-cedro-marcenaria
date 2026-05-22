@@ -126,7 +126,7 @@ function Home() {
 						Na Studio Cedro, acreditamos que marcenaria vai além da madeira. É
 						compromisso, confiança e dedicação. Trabalhamos para transformar
 						ideias em soluções personalizadas, entregando ambientes que refletem
-						estilo, conforto e personalidade. ola
+						estilo, conforto e personalidade. 
 					</p>
 				</div>
 			</section>
