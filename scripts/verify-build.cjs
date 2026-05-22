@@ -6,6 +6,7 @@ const outputDir = dirArgIndex >= 0 ? process.argv[dirArgIndex + 1] : "dist";
 const distDir = path.join(process.cwd(), outputDir);
 const indexPath = path.join(distDir, "index.html");
 const assetPattern = /(?:src|href)="([^"]*\/assets\/[^"]+)"/g;
+const faviconVersion = "v=4";
 const repositoryName =
   process.env.GITHUB_REPOSITORY?.split("/").pop() ||
   "studio-cedro-marcenaria";
@@ -32,6 +33,10 @@ function collectFiles(directory, extensions) {
 
     return extensions.includes(path.extname(entry.name)) ? [entryPath] : [];
   });
+}
+
+function hasExactFileName(directory, fileName) {
+  return fs.existsSync(directory) && fs.readdirSync(directory).includes(fileName);
 }
 
 if (!fs.existsSync(indexPath)) {
@@ -66,12 +71,24 @@ if (isPagesBuild && !html.includes(expectedBase)) {
 }
 
 const expectedFaviconPath =
-  outputDir === "docs" && isPagesBuild
-    ? `${expectedBase}docs/favicon.png`
-    : `${expectedBase}favicon.png`;
+  `${expectedBase}favicon.png`;
+const expectedShortcutPath =
+  `${expectedBase}favicon.ico`;
 
-if (!html.includes(expectedFaviconPath)) {
+if (!html.includes(`${expectedFaviconPath}?${faviconVersion}`)) {
   throw new Error(`index.html does not reference favicon with expected base: ${expectedBase}`);
+}
+
+if (!html.includes(`${expectedShortcutPath}?${faviconVersion}`)) {
+  throw new Error(`index.html does not reference shortcut icon with expected base: ${expectedBase}`);
+}
+
+if (!hasExactFileName(distDir, "favicon.png")) {
+  throw new Error("Build output is missing favicon.png with the exact lowercase file name.");
+}
+
+if (!hasExactFileName(distDir, "favicon.ico")) {
+  throw new Error("Build output is missing favicon.ico with the exact lowercase file name.");
 }
 
 for (const pattern of forbiddenPatterns) {

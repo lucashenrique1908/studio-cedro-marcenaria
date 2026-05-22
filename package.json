@@ -6,14 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:vercel": "npm run build && npm run verify",
+    "build:vercel": "vite build --mode vercel && npm run verify",
     "build:pages": "vite build --mode github-pages",
     "build:docs": "node scripts/copy-build.cjs dist docs",
     "preview": "vite preview",
     "verify": "node scripts/verify-build.cjs",
     "verify:pages": "node scripts/verify-build.cjs --pages",
     "verify:docs": "node scripts/verify-build.cjs --pages --dir docs",
-    "deploy": "npm run build:pages && npm run verify:pages"
+    "deploy": "npm run build:pages && npm run verify:pages && npm run build:docs && npm run verify:docs"
   },
   "dependencies": {
     "react": "^18.0.0",
