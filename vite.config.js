@@ -20,13 +20,14 @@ function isVercelBuild() {
 function isGitHubPagesBuild(mode) {
   return (
     mode === "github-pages" ||
-    Boolean(process.env.GITHUB_PAGES) ||
-    Boolean(process.env.GITHUB_ACTIONS)
+    process.env.DEPLOY_TARGET === "github-pages" ||
+    process.env.VITE_DEPLOY_TARGET === "github-pages" ||
+    Boolean(process.env.GITHUB_PAGES)
   );
 }
 
 function getBasePath({ mode }) {
-  if (isVercelBuild()) {
+  if (mode === "vercel" || process.env.DEPLOY_TARGET === "vercel" || isVercelBuild()) {
     return "/";
   }
 
