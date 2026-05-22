@@ -6,7 +6,7 @@
     <script>
       var segments = location.pathname.split("/");
       var basePath = location.hostname.endsWith(".github.io")
-        ? "/" + segments[1] + "/docs/"
+        ? "/" + segments[1] + "/"
         : "/";
 
       sessionStorage.redirect = location.href;
