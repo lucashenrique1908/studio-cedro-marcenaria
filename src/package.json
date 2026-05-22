@@ -1,7 +1,0 @@
-{
-  "scripts": {
-    "dev": "npm --prefix .. run dev",
-    "build": "npm --prefix .. run build",
-    "preview": "npm --prefix .. run preview -- --host 127.0.0.1 --port 4173 --strictPort"
-  }
-}

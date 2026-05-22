@@ -1,52 +1,25 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/studioMarcenaria/favicon.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>studiomarcenaria</title>
-		<script type="text/javascript">
-			(function (l) {
-				if (l.pathname.endsWith("/index.prod.html")) {
-					window.history.replaceState(
-						null,
-						null,
-						l.pathname.replace(/\/index\.prod\.html$/, "/") + l.search + l.hash,
-					);
-					return;
-				}
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/studio-cedro-marcenaria/favicon.svg" />
+    <title>Studio Cedro Marcenaria</title>
+    <script>
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
 
-				if (l.search[1] === "/") {
-					var decoded = l.search
-						.slice(1)
-						.split("&")
-						.map(function (segment) {
-							return segment.replace(/~and~/g, "&");
-						})
-						.join("?");
-
-					window.history.replaceState(
-						null,
-						null,
-						l.pathname.slice(0, -1) + decoded + l.hash,
-					);
-				}
-			})(window.location);
-		</script>
-		<script type="module" crossorigin src="/studioMarcenaria/assets/index-Vtz66i8w.js"></script>
-		<link rel="stylesheet" crossorigin href="/studioMarcenaria/assets/index-DT4fW_oo.css">
-	</head>
-	<body>
-		<div id="root"></div>
-		<script type="text/javascript">
-			(function (l) {
-				var devEntrypoint = document.querySelector(
-					'script[src="/src/main.jsx"]',
-				);
-				if (l.hostname === "riqueecode.github.io" && devEntrypoint) {
-					l.replace("/studioMarcenaria/index.prod.html" + l.search + l.hash);
-				}
-			})(window.location);
-		</script>
-	</body>
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, "", redirect);
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/studio-cedro-marcenaria/assets/index-5155ea78.js"></script>
+    <link rel="stylesheet" href="/studio-cedro-marcenaria/assets/index-535c49ab.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    
+  </body>
 </html>

@@ -8,12 +8,15 @@ import "./styles/global.css";
 import "./styles/layout.css";
 import "./styles/pages.css";
 
-const routerBaseName = import.meta.env.BASE_URL.replace(/\/$/, "");
+const routerBasename =
+  import.meta.env.BASE_URL === "/"
+    ? undefined
+    : import.meta.env.BASE_URL.replace(/\/$/, "");
 
 createRoot(document.getElementById("root")).render(
-	<StrictMode>
-		<BrowserRouter basename={routerBaseName}>
-			<App />
-		</BrowserRouter>
-	</StrictMode>,
+  <StrictMode>
+    <BrowserRouter basename={routerBasename}>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
 );

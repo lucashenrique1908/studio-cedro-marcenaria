@@ -1,5 +1,5 @@
 const imageModules = import.meta.glob(
-  '../../docs/assets/{cozinha,Quartos,DesignsEspeciais}/*.{jpeg,jpg,png,webp,avif}',
+  '../assets/projects/{cozinha,Quartos,DesignsEspeciais}/*.{jpeg,jpg,png,webp,avif}',
   {
     eager: true,
     import: 'default',
@@ -90,7 +90,7 @@ const folderConfig = {
 };
 
 function getFolderName(path) {
-  return path.match(/\/docs\/assets\/([^/]+)\//)?.[1];
+  return path.match(/\/projects\/([^/]+)\//)?.[1];
 }
 
 function getFileName(path) {
