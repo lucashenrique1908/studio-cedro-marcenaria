@@ -60,6 +60,10 @@ export default defineConfig(({ mode }) => {
           handler(html) {
             return {
               html: html
+                .replace(
+                  /        \/\* RAW_GITHUB_PAGES_REDIRECT_START \*\/[\s\S]*?        \/\* RAW_GITHUB_PAGES_REDIRECT_END \*\/\n\n/,
+                  ""
+                )
                 .replace(/href="\.\/docs\/favicon\.png\?v=5"/g, `href="${base}favicon.png?v=5"`)
                 .replace(/href="\.\/docs\/favicon\.ico\?v=5"/g, `href="${base}favicon.ico?v=5"`),
               tags: [

@@ -8,6 +8,7 @@
     <title>Studio Cedro Marcenaria</title>
     <script>
       (function () {
+        /* RAW_GITHUB_PAGES_REDIRECT_START */
         if (
           location.hostname.endsWith("github.io") &&
           !location.pathname.startsWith("/studio-cedro-marcenaria/docs/")
@@ -15,6 +16,7 @@
           location.replace("/studio-cedro-marcenaria/docs/");
           return;
         }
+        /* RAW_GITHUB_PAGES_REDIRECT_END */
 
         var redirect = sessionStorage.redirect;
         delete sessionStorage.redirect;
