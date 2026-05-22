@@ -65,7 +65,12 @@ if (isPagesBuild && !html.includes(expectedBase)) {
   throw new Error(`GitHub Pages build does not include expected base path: ${expectedBase}`);
 }
 
-if (!html.includes(`${expectedBase}favicon.svg`)) {
+const expectedFaviconPath =
+  outputDir === "docs" && isPagesBuild
+    ? `${expectedBase}docs/favicon.png`
+    : `${expectedBase}favicon.png`;
+
+if (!html.includes(expectedFaviconPath)) {
   throw new Error(`index.html does not reference favicon with expected base: ${expectedBase}`);
 }
 
